@@ -1,0 +1,92 @@
+{
+  "vault": [
+    {
+      "name": "BNB",
+      "options": [
+        {
+          "amount": "1000",
+          "price": "0.15",
+          "srcBackground": "/images/bg-ico-vault.jpg",
+          "srcLogo": "/images/logo-bnb.png"
+        },
+        {
+          "amount": "5000",
+          "price": "0.5",
+          "srcBackground": "/images/bg-ico-vault.jpg",
+          "srcLogo": "/images/logo-bnb.png"
+        },
+        {
+          "amount": "15000",
+          "price": "1",
+          "srcBackground": "/images/bg-ico-vault.jpg",
+          "srcLogo": "/images/logo-bnb.png"
+        },
+        {
+          "amount": "50000",
+          "price": "3",
+          "srcBackground": "/images/bg-ico-vault.jpg",
+          "srcLogo": "/images/logo-bnb.png"
+        }
+      ]
+    },
+    {
+      "name": "USDT",
+
+      "options": [
+        {
+          "amount": "1000",
+          "price": "80",
+          "srcBackground": "/images/bg-usdt.jpg",
+          "srcLogo": "/images/tether-usdt-logo.png"
+        },
+        {
+          "amount": "5000",
+          "price": "350",
+          "srcBackground": "/images/bg-usdt.jpg",
+          "srcLogo": "/images/tether-usdt-logo.png"
+        },
+        {
+          "amount": "15000",
+          "price": "700",
+          "srcBackground": "/images/bg-usdt.jpg",
+          "srcLogo": "/images/tether-usdt-logo.png"
+        },
+        {
+          "amount": "50000",
+          "price": "2100",
+          "srcBackground": "/images/bg-usdt.jpg",
+          "srcLogo": "/images/tether-usdt-logo.png"
+        }
+      ]
+    },
+    {
+      "name": "SOL",
+      "options": [
+        {
+          "amount": "1000",
+          "price": "0.45",
+          "srcBackground": "/images/bg-solana.png",
+          "srcLogo": "/images/solana-logo.png"
+        },
+        {
+          "amount": "5000",
+          "price": "1.5",
+          "srcBackground": "/images/bg-solana.png",
+          "srcLogo": "/images/solana-logo.png"
+        },
+        {
+          "amount": "15000",
+          "price": "3",
+          "srcBackground": "/images/bg-solana.png",
+          "srcLogo": "/images/solana-logo.png"
+        },
+        {
+          "amount": "50000",
+          "price": "9",
+          "srcBackground": "/images/bg-solana.png",
+          "srcLogo": "/images/solana-logo.png"
+        }
+      ]
+    }
+  ]
+}
