@@ -5,17 +5,23 @@ import MeneHeader from "./MenuHeader";
 import ThemeSwitcher from "./ThemeSwitcher";
 import { useAppContext } from "@/src/contexts/AppContext";
 import ModalInforWallet from "../modals/ModalInforWallet";
+import { useCallback, useMemo } from "react";
+import { numberFormat } from "../utils";
 
 const Header = () => {
   const { account, connectWallet, balance, tokens } = useWallet();
+  const { setIsOpenModalWallet, isOpenModalWallet } = useAppContext();
 
-  const appContext = useAppContext();
-  const { setIsOpenModalWallet, isOpenModalWallet } = appContext;
+  const formatterdAccount = useMemo(() => {
+    return account
+      ? `${account.slice(0, 6)}...${account.slice(-4)}`
+      : "Connect Wallet";
+  }, [account]);
 
-  const handleOnClickConnect = () => {
+  const handleOnClickConnect = useCallback(() => {
     if (!account) connectWallet();
     else setIsOpenModalWallet(true);
-  };
+  }, [account, connectWallet, setIsOpenModalWallet]);
 
   return (
     <header className="py-5 fixed z-50 bg-slate-50 dark:bg-slate-900 w-full">
@@ -25,9 +31,7 @@ const Header = () => {
           <MeneHeader />
           <ThemeSwitcher />
           <button className="btn-gradient" onClick={handleOnClickConnect}>
-            {account
-              ? `${account.slice(0, 6)}...${account.slice(-4)}`
-              : "Connect Wallet"}
+            {formatterdAccount}
           </button>
         </nav>
       </div>

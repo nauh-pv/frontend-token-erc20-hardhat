@@ -27,10 +27,9 @@ const useWallet = () => {
     }
     try {
       const accounts = await provider.send("eth_requestAccounts", []);
-      console.log("Connected account:", accounts);
-
       setAccount(accounts[0]);
       getBalance(accounts[0]);
+      getFLPBalance(accounts[0]);
     } catch (error) {
       console.error("Error connecting wallet:", error);
     }
@@ -40,17 +39,21 @@ const useWallet = () => {
     if (!provider) return;
     try {
       const balance = await provider.getBalance(walletAddress);
-      console.log("Balance:", balance);
       setBalance(ethers.formatEther(balance));
     } catch (error) {
       console.error("Error fetching balance:", error);
     }
   };
 
-  const getUSDTBalance = async (walletAddress: string) => {
+  const getFLPBalance = async (walletAddress: string) => {
     if (!provider) return;
-    const balance = await getTokenBalance(provider, walletAddress, data.FLP);
-    console.log("💰 USDT Balance:", balance);
+    try {
+      const balance = await getTokenBalance(provider, walletAddress, data.FLP);
+      setTokens([{ symbol: "FLP", balance }]);
+      console.log("💰 USDT Balance:", balance);
+    } catch (error) {
+      console.error("Error fetching FLP balance:", error);
+    }
   };
 
   return { account, connectWallet, provider, balance, tokens };
