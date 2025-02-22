@@ -28,3 +28,7 @@ body {
 .content {
   @apply mt-[6rem];
 }
+
+.bg-blackcss {
+  @apply bg-black;
+}

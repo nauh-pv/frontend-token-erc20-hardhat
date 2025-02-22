@@ -1,12 +1,16 @@
-import Card from "@/components/Card";
+"use client";
+
+import Card from "@/src/components/Card";
 import { Breadcrumb } from "antd";
 
 //import data
-import data from "@/shared/data/ico.json";
-import DefaultLayout from "@/shared/layouts/DefaultLayout";
+import data from "@/src/data/ico.json";
+import DefaultLayout from "@/src/layouts/DefaultLayout";
+import { useState } from "react";
 
 export default function Home() {
   const { vault } = data;
+
   return (
     <DefaultLayout>
       <h2 className="font-medium text-xl">Packages</h2>
