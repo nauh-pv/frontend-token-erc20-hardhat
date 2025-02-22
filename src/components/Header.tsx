@@ -1,27 +1,27 @@
 "use client";
 
+import { useCallback, useMemo } from "react";
+
 import useWallet from "@/src/hooks/useWallet";
 import MeneHeader from "./MenuHeader";
 import ThemeSwitcher from "./ThemeSwitcher";
 import { useAppContext } from "@/src/contexts/AppContext";
 import ModalInforWallet from "../modals/ModalInforWallet";
-import { useCallback, useMemo } from "react";
-import { numberFormat } from "../utils";
 
 const Header = () => {
-  const { account, connectWallet, balance, tokens } = useWallet();
+  const { wallet, connectWallet, setWallet } = useWallet();
   const { setIsOpenModalWallet, isOpenModalWallet } = useAppContext();
 
   const formatterdAccount = useMemo(() => {
-    return account
-      ? `${account.slice(0, 6)}...${account.slice(-4)}`
+    return wallet.address
+      ? `${wallet.address.slice(0, 6)}...${wallet.address.slice(-6)}`
       : "Connect Wallet";
-  }, [account]);
+  }, [wallet.address]);
 
   const handleOnClickConnect = useCallback(() => {
-    if (!account) connectWallet();
+    if (!wallet.address) connectWallet();
     else setIsOpenModalWallet(true);
-  }, [account, connectWallet, setIsOpenModalWallet]);
+  }, [wallet.address, connectWallet, setIsOpenModalWallet]);
 
   return (
     <header className="py-5 fixed z-50 bg-slate-50 dark:bg-slate-900 w-full">
@@ -39,7 +39,8 @@ const Header = () => {
         {...{
           isOpen: isOpenModalWallet,
           setIsOpen: setIsOpenModalWallet,
-          wallet: { account, balance, tokens },
+          wallet,
+          setWallet,
         }}
       />
     </header>

@@ -5,14 +5,15 @@ import { useEffect, useState } from "react";
 
 import { getTokenBalance } from "../utils/getTokenBalance";
 import data from "@/token-list.json";
+import { WalletProps } from "../types";
 
 const useWallet = () => {
-  const [account, setAccount] = useState<string | null>(null);
   const [provider, setProvider] = useState<ethers.BrowserProvider | null>(null);
-  const [balance, setBalance] = useState<string | null>(null);
-  const [tokens, setTokens] = useState<{ symbol: string; balance: string }[]>(
-    []
-  );
+  const [wallet, setWallet] = useState<WalletProps>({
+    address: null,
+    balance: null,
+    tokens: [],
+  });
 
   useEffect(() => {
     if ((window as any).ethereum) {
@@ -27,7 +28,7 @@ const useWallet = () => {
     }
     try {
       const accounts = await provider.send("eth_requestAccounts", []);
-      setAccount(accounts[0]);
+      setWallet((prev) => ({ ...prev, address: accounts[0] }));
       getBalance(accounts[0]);
       getFLPBalance(accounts[0]);
     } catch (error) {
@@ -39,7 +40,7 @@ const useWallet = () => {
     if (!provider) return;
     try {
       const balance = await provider.getBalance(walletAddress);
-      setBalance(ethers.formatEther(balance));
+      setWallet((prev) => ({ ...prev, balance: ethers.formatEther(balance) }));
     } catch (error) {
       console.error("Error fetching balance:", error);
     }
@@ -49,13 +50,17 @@ const useWallet = () => {
     if (!provider) return;
     try {
       const balance = await getTokenBalance(provider, walletAddress, data.FLP);
-      setTokens([{ symbol: "FLP", balance }]);
+      setWallet((prev) => ({
+        ...prev,
+        tokens: [...prev.tokens, { symbol: "FLP", balance }],
+      }));
+
       console.log("💰 USDT Balance:", balance);
     } catch (error) {
       console.error("Error fetching FLP balance:", error);
     }
   };
 
-  return { account, connectWallet, provider, balance, tokens };
+  return { connectWallet, provider, wallet, setWallet };
 };
 export default useWallet;
