@@ -5,7 +5,7 @@
       "options": [
         {
           "amount": "1000",
-          "price": "0.15",
+          "price": "0.01",
           "srcBackground": "/images/bg-ico-vault.jpg",
           "srcLogo": "/images/logo-bnb.png"
         },

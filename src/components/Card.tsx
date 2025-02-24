@@ -6,6 +6,7 @@ interface CardProps {
   currency: string;
   price: string;
   amount: string;
+  handleBuy: (bnbAmount: string) => void;
 }
 
 const Card = ({
@@ -14,6 +15,7 @@ const Card = ({
   currency,
   price,
   amount,
+  handleBuy,
 }: CardProps) => {
   return (
     <div className="relative flex flex-col items-center justify-center w-full h-fit rounded-3xl bg-slate-100 dark:bg-slate-800 shadow-md hover:border-primary dark:hover:border-primary hover:border-[1px] transition-all duration-300 border-[1px] border-slate-100 dark:border-slate-800">
@@ -47,7 +49,12 @@ const Card = ({
             {price} {currency}
           </span>
         </p>
-        <button className="btn-gradient w-full">Buy Now</button>
+        <button
+          className="btn-gradient w-full"
+          onClick={() => handleBuy(price)}
+        >
+          Buy Now
+        </button>
       </section>
     </div>
   );
