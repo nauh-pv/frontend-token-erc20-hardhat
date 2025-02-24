@@ -1,23 +1,21 @@
 "use client";
+
 import { Modal } from "antd";
 import Image from "next/image";
 import { IoCopyOutline } from "react-icons/io5";
 import { handleCopy } from "../utils";
-import { WalletProps } from "../types";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import { resetWallet } from "../redux/walletSlice";
 
 interface ModalInforWalletProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  wallet: WalletProps;
-  setWallet: (wallet: WalletProps) => void;
 }
 
-const ModalInforWallet = ({
-  isOpen,
-  setIsOpen,
-  wallet,
-  setWallet,
-}: ModalInforWalletProps) => {
+const ModalInforWallet = ({ isOpen, setIsOpen }: ModalInforWalletProps) => {
+  const dispath = useAppDispatch();
+  const { address, tokens, balance } = useAppSelector((state) => state.wallet);
+
   const handleCancel = () => {
     setIsOpen(false);
   };
@@ -27,11 +25,7 @@ const ModalInforWallet = ({
   };
 
   const handleDisconnectWallet = () => {
-    setWallet({
-      address: null,
-      balance: null,
-      tokens: [],
-    });
+    dispath(resetWallet());
     setIsOpen(false);
     localStorage.removeItem("walletAddress");
     if ((window as any).ethereum?.disconnect) {
@@ -48,12 +42,12 @@ const ModalInforWallet = ({
     >
       <section className="flex flex-col gap-4 items-center py-6">
         <div className="flex flex-col gap-5 items-center">
-          {wallet.address ? (
+          {address && address ? (
             <p className="btn-gradient w-fit flex items-center gap-2">
-              {wallet.address}
+              {address}
               <IoCopyOutline
                 className="cursor-pointer"
-                onClick={() => handleCopy(wallet.address ? wallet.address : "")}
+                onClick={() => handleCopy(address ? address : "")}
               />
             </p>
           ) : (
@@ -72,13 +66,13 @@ const ModalInforWallet = ({
               />
             </div>
             <p className="font-bold">
-              {formattedBalance(wallet.balance ? +wallet.balance : 0)} BNB
+              {formattedBalance(balance ? +balance : 0)} BNB
             </p>
           </div>
           <div className="flex gap-4 items-center justify-start">
-            {wallet.tokens &&
-              wallet.tokens.length > 0 &&
-              wallet.tokens.map((token: any, index: number) => {
+            {tokens &&
+              tokens.length > 0 &&
+              tokens.map((token: any, index: number) => {
                 return (
                   <div className="flex items-center gap-2" key={index}>
                     <div className="p-[1px] bg-slate-50 dark:bg-slate-900 rounded-full shadow-md w-fit">

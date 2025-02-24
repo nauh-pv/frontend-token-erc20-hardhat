@@ -1,13 +1,18 @@
 // src/features/wallet/walletThunks.ts
 import { ethers } from "ethers";
-import { setAddress, setBalance, addToken, resetWallet } from "./walletSlice";
+import {
+  setAddress,
+  setBalance,
+  addToken,
+  resetWallet,
+  setTokens,
+} from "./walletSlice";
 import data from "@/token-list.json";
-import { AppDispatch } from "./store";
+import { AppDispatch, RootState } from "./store";
 import { getTokenBalance } from "../utils/getTokenBalance";
 
 let provider: ethers.BrowserProvider | null = null;
 
-// Kết nối ví MetaMask
 export const connectWallet = () => async (dispatch: AppDispatch) => {
   if (!(window as any).ethereum) {
     alert("Please install MetaMask!");
@@ -42,12 +47,31 @@ export const getBalance =
 
 // Lấy số dư token FLP
 export const getFLPBalance =
-  (walletAddress: string) => async (dispatch: AppDispatch) => {
+  (walletAddress: string) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     if (!provider) return;
     try {
       const balance = await getTokenBalance(provider, walletAddress, data.FLP);
-      dispatch(addToken({ symbol: "FLP", balance }));
-      console.log("💰 FLP Balance:", balance);
+      const currentTokens = getState().wallet.tokens;
+
+      const indexSLP = currentTokens.findIndex(
+        (token) => token.symbol === "FLP"
+      );
+
+      if (indexSLP !== -1) {
+        if (currentTokens[indexSLP].balance! == balance) {
+          return;
+        }
+        const updatedTokens = currentTokens.map((token) => {
+          if (token.symbol === "FLP") {
+            return { symbol: "FLP", balance };
+          }
+          return token;
+        });
+        dispatch(setTokens(updatedTokens));
+      } else {
+        dispatch(addToken({ symbol: "FLP", balance }));
+      }
     } catch (error) {
       console.error("Error fetching FLP balance:", error);
     }

@@ -1,27 +1,44 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 
-import useWallet from "@/src/hooks/useWallet";
 import MeneHeader from "./MenuHeader";
 import ThemeSwitcher from "./ThemeSwitcher";
 import { useAppContext } from "@/src/contexts/AppContext";
 import ModalInforWallet from "../modals/ModalInforWallet";
+import { connectWallet, getBalance, getFLPBalance } from "../redux/walletThunk";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
 const Header = () => {
-  const { wallet, connectWallet, setWallet } = useWallet();
+  const { address } = useAppSelector((state) => state.wallet);
+  const dispatch = useAppDispatch();
+
   const { setIsOpenModalWallet, isOpenModalWallet } = useAppContext();
 
   const formatterdAccount = useMemo(() => {
-    return wallet.address
-      ? `${wallet.address.slice(0, 6)}...${wallet.address.slice(-6)}`
+    return address
+      ? `${address.slice(0, 6)}...${address.slice(-6)}`
       : "Connect Wallet";
-  }, [wallet.address]);
+  }, [address]);
 
-  const handleOnClickConnect = useCallback(() => {
-    if (!wallet.address) connectWallet();
-    else setIsOpenModalWallet(true);
-  }, [wallet.address, connectWallet, setIsOpenModalWallet]);
+  const fetchBalance = () => {
+    if (address && address.length > 0) {
+      dispatch(getFLPBalance(address));
+      dispatch(getBalance(address));
+    }
+  };
+
+  const handleOnClickConnect = () => {
+    console.log("🔌 Connecting wallet. 111..", !address);
+    if (!address) {
+      console.log("🔌 Connecting wallet. 22222..");
+
+      dispatch(connectWallet());
+    } else {
+      setIsOpenModalWallet(true);
+      fetchBalance();
+    }
+  };
 
   return (
     <header className="py-5 fixed z-50 bg-slate-50 dark:bg-slate-900 w-full">
@@ -39,8 +56,6 @@ const Header = () => {
         {...{
           isOpen: isOpenModalWallet,
           setIsOpen: setIsOpenModalWallet,
-          wallet,
-          setWallet,
         }}
       />
     </header>
