@@ -4,6 +4,8 @@ import { createContext, useContext, useState } from "react";
 interface AppContextType {
   isOpenModalWallet: boolean;
   setIsOpenModalWallet: React.Dispatch<React.SetStateAction<boolean>>;
+  isConnectWallet: boolean;
+  setIsConnectWallet: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -14,9 +16,17 @@ interface AppProviderProps {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   const [isOpenModalWallet, setIsOpenModalWallet] = useState<boolean>(false);
+  const [isConnectWallet, setIsConnectWallet] = useState<boolean>(false);
 
   return (
-    <AppContext.Provider value={{ isOpenModalWallet, setIsOpenModalWallet }}>
+    <AppContext.Provider
+      value={{
+        isOpenModalWallet,
+        setIsOpenModalWallet,
+        isConnectWallet,
+        setIsConnectWallet,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );

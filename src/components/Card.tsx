@@ -1,4 +1,7 @@
 import Image from "next/image";
+import { buyTokenWithBNB } from "@/src/utils/BuyICO";
+import { LoadingButtonState } from "../types";
+import { ClipLoader } from "react-spinners";
 
 interface CardProps {
   srcBackground: string;
@@ -6,7 +9,11 @@ interface CardProps {
   currency: string;
   price: string;
   amount: string;
-  handleBuy: (bnbAmount: string) => void;
+  isConnectWallet: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<LoadingButtonState[]>>;
+  groupIndex: number;
+  optionIndex: number;
+  isLoadingButton: boolean;
 }
 
 const Card = ({
@@ -15,8 +22,17 @@ const Card = ({
   currency,
   price,
   amount,
-  handleBuy,
+  isConnectWallet,
+  setIsLoading,
+  groupIndex,
+  optionIndex,
+  isLoadingButton,
 }: CardProps) => {
+  const checkIsLoadingButton = () => {
+    if (isLoadingButton || !isConnectWallet) return true;
+    return false;
+  };
+
   return (
     <div className="relative flex flex-col items-center justify-center w-full h-fit rounded-3xl bg-slate-100 dark:bg-slate-800 shadow-md hover:border-primary dark:hover:border-primary hover:border-[1px] transition-all duration-300 border-[1px] border-slate-100 dark:border-slate-800">
       <Image
@@ -50,10 +66,17 @@ const Card = ({
           </span>
         </p>
         <button
-          className="btn-gradient w-full"
-          onClick={() => handleBuy(price)}
+          className="btn-gradient w-full flex items-center justify-center"
+          disabled={checkIsLoadingButton()}
+          onClick={() =>
+            buyTokenWithBNB(price, setIsLoading, groupIndex, optionIndex)
+          }
         >
-          Buy Now
+          {isLoadingButton ? (
+            <ClipLoader color="white" size={25} />
+          ) : (
+            " Buy Now"
+          )}
         </button>
       </section>
     </div>

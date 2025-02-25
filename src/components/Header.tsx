@@ -13,7 +13,8 @@ const Header = () => {
   const { address } = useAppSelector((state) => state.wallet);
   const dispatch = useAppDispatch();
 
-  const { setIsOpenModalWallet, isOpenModalWallet } = useAppContext();
+  const { setIsOpenModalWallet, isOpenModalWallet, setIsConnectWallet } =
+    useAppContext();
 
   const formatterdAccount = useMemo(() => {
     return address
@@ -29,11 +30,9 @@ const Header = () => {
   };
 
   const handleOnClickConnect = () => {
-    console.log("🔌 Connecting wallet. 111..", !address);
     if (!address) {
-      console.log("🔌 Connecting wallet. 22222..");
-
       dispatch(connectWallet());
+      setIsConnectWallet(true);
     } else {
       setIsOpenModalWallet(true);
       fetchBalance();

@@ -6,10 +6,22 @@ import { Breadcrumb } from "antd";
 //import data
 import data from "@/src/data/ico.json";
 import DefaultLayout from "@/src/layouts/DefaultLayout";
-import { buyTokenWithBNB } from "@/src/utils/BuyICO";
+import { useAppContext } from "@/src/contexts/AppContext";
+import { useState } from "react";
+import { LoadingButtonState } from "@/src/types";
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState<LoadingButtonState[]>([]);
   const { vault } = data;
+  const context = useAppContext();
+  const { isConnectWallet } = context;
+
+  const checkIsLoadingButton = (vaultIndex: number, optionIndex: number) => {
+    return isLoading.some(
+      (item) =>
+        item.groupIndex === vaultIndex && item.optionIndex === optionIndex
+    );
+  };
 
   return (
     <DefaultLayout>
@@ -43,17 +55,24 @@ export default function Home() {
                 {item &&
                   item.options &&
                   item.options.length > 0 &&
-                  item.options.map((option, index) => {
+                  item.options.map((option, indexChild) => {
                     return (
                       <Card
-                        key={index}
+                        key={indexChild}
                         {...{
                           srcBackground: option.srcBackground,
                           srcLogo: option.srcLogo,
                           currency: item.name,
                           price: option.price,
                           amount: option.amount,
-                          handleBuy: buyTokenWithBNB,
+                          isConnectWallet,
+                          setIsLoading,
+                          groupIndex: index,
+                          optionIndex: indexChild,
+                          isLoadingButton: checkIsLoadingButton(
+                            index,
+                            indexChild
+                          ),
                         }}
                       />
                     );

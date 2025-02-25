@@ -1,8 +1,19 @@
 import { ethers } from "ethers";
 import { CONTRACT_ADDRESSES, CONTRACT_ABIS } from "../config/contractConfig";
+import { LoadingButtonState } from "../types";
+import { message } from "antd";
 
-export const buyTokenWithBNB = async (bnbAmount: string) => {
+export const buyTokenWithBNB = async (
+  bnbAmount: string,
+  setIsLoading: React.Dispatch<React.SetStateAction<LoadingButtonState[]>>,
+  groupIndex: number,
+  optionIndex: number
+) => {
   if (!(window as any).ethereum) return alert("Please install MetaMask!");
+
+  setIsLoading((prev) => {
+    return [...prev, { groupIndex, optionIndex }];
+  });
 
   try {
     const provider = new ethers.BrowserProvider((window as any).ethereum);
@@ -36,8 +47,16 @@ export const buyTokenWithBNB = async (bnbAmount: string) => {
     });
 
     await tx.wait();
-    alert("Mua FLP bằng BNB thành công!");
+    message.success("Mua FLP bằng BNB thành công!");
   } catch (error) {
     console.error("Lỗi khi mua FLP bằng BNB:", error);
+    message.error("Mua FLP bằng BNB thất bại!");
+  } finally {
+    setIsLoading((prev) =>
+      prev.filter(
+        (item) =>
+          item.groupIndex !== groupIndex && item.optionIndex !== optionIndex
+      )
+    );
   }
 };
