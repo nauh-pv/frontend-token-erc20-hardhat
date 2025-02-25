@@ -1,12 +1,28 @@
-import Card from "@/components/Card";
+"use client";
+
+import Card from "@/src/components/Card";
 import { Breadcrumb } from "antd";
 
 //import data
-import data from "@/shared/data/ico.json";
-import DefaultLayout from "@/shared/layouts/DefaultLayout";
+import data from "@/src/data/ico.json";
+import DefaultLayout from "@/src/layouts/DefaultLayout";
+import { useAppContext } from "@/src/contexts/AppContext";
+import { useState } from "react";
+import { LoadingButtonState } from "@/src/types";
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState<LoadingButtonState[]>([]);
   const { vault } = data;
+  const context = useAppContext();
+  const { isConnectWallet } = context;
+
+  const checkIsLoadingButton = (vaultIndex: number, optionIndex: number) => {
+    return isLoading.some(
+      (item) =>
+        item.groupIndex === vaultIndex && item.optionIndex === optionIndex
+    );
+  };
+
   return (
     <DefaultLayout>
       <h2 className="font-medium text-xl">Packages</h2>
@@ -39,16 +55,24 @@ export default function Home() {
                 {item &&
                   item.options &&
                   item.options.length > 0 &&
-                  item.options.map((option, index) => {
+                  item.options.map((option, indexChild) => {
                     return (
                       <Card
-                        key={index}
+                        key={indexChild}
                         {...{
                           srcBackground: option.srcBackground,
                           srcLogo: option.srcLogo,
                           currency: item.name,
                           price: option.price,
                           amount: option.amount,
+                          isConnectWallet,
+                          setIsLoading,
+                          groupIndex: index,
+                          optionIndex: indexChild,
+                          isLoadingButton: checkIsLoadingButton(
+                            index,
+                            indexChild
+                          ),
                         }}
                       />
                     );

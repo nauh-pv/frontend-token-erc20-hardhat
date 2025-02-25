@@ -22,9 +22,13 @@ body {
 }
 
 .btn-gradient {
-  @apply rounded-full bg-gradient-to-r from-primary via-primary to-second text-[16px] hover:bg-gradient-to-t hover:from-second ease-in-out delay-100 hover:to-primary py-2 px-4 font-medium text-white transition-all duration-500 disabled:pointer-events-none disabled:opacity-70 sm:px-6;
+  @apply rounded-full bg-gradient-to-r h-12 from-primary via-primary to-second text-[16px] hover:bg-gradient-to-t hover:from-second ease-in-out delay-100 hover:to-primary py-2 px-4 font-medium text-white transition-all duration-500 disabled:pointer-events-none disabled:opacity-70 sm:px-6;
 }
 
 .content {
   @apply mt-[6rem];
+}
+
+.bg-blackcss {
+  @apply bg-black;
 }
