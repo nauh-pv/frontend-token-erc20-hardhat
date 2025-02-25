@@ -8,3 +8,8 @@ interface TokenProps {
   symbol: string;
   balance: string;
 }
+
+export interface LoadingButtonState {
+  groupIndex: number | null;
+  optionIndex: number | null;
+}
