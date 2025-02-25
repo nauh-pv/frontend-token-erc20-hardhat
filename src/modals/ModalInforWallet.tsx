@@ -94,7 +94,7 @@ const ModalInforWallet = ({ isOpen, setIsOpen }: ModalInforWalletProps) => {
         </div>
         <button
           onClick={() => handleDisconnectWallet()}
-          className="py-2 border-[1px] rounded-full border-slate-400 duration-200 ease-in-out delay-100 transition px-6 dark:border-slate-50 dark:border-[1px] hover:border-destructive hover:text-destructive dark:hover:border-destructive w-fit dark:hover:text-destructive text-slate-400 dark:text-slate-50"
+          className="py-2 border-[1px] rounded-full border-slate-400 duration-200 ease-in-out delay-100 transition px-6 dark:border-slate-50 dark:border-[1px] hover:border-destructive hover:text-destructive dark:hover:border-destructive w-fit dark:hover:text-destructive text-slate-400 dark:!text-slate-50"
         >
           Disconnected
         </button>
